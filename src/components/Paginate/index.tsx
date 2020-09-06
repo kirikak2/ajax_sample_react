@@ -10,7 +10,7 @@ type Props = {
 
 export const Paginate = React.memo((props: Props) => {
   const { total, per, page, onClick } = props;
-  const lastPage = (total / per) + (total % per == 0 ? 0 : 1);
+  const lastPage = (total / per) + (total % per === 0 ? 0 : 1);
 
   const paginationItems = [];
 

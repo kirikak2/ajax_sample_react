@@ -1,9 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { getAddresses } from '../resources';
+import { getAddresses, createAddress, updateAddress, deleteAddress } from '../resources';
 import { AddressType } from '../resources/types';
 import { Paginate } from '../Paginate';
 
-import { Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
+import { NewAddressForm, EditAddressForm } from '../AddressForm';
 
 type PageInfoType = {
     total: number;
@@ -14,20 +15,69 @@ type PageInfoType = {
 export const AddressList = () => {
     const [addressState, setAddressState] = useState<AddressType[]>([]);
     const [pageInfoState, setPageInfoState] = useState<PageInfoType>({ total: 0, page: 1, per: 20 });
-    useEffect(() => {
-        const promise = getAddresses(pageInfoState);
-        promise.then((data) => {
-            setAddressState(data.results);
-            setPageInfoState({ total: data.total, page: data.page, per: data.per });
-        });
-    }, [pageInfoState.page, pageInfoState.per]);
 
-    const handleClick = useCallback((page: number) => {
+    const [newFormState, setNewFormState] = useState({ isOpen: false });
+    const [editFormState, setEditFormState] = useState({ isOpen: false, address: undefined });
+    const [refresh, setRefresh] = useState(true);
+
+    useEffect(() => {
+        if(refresh) {
+            const promise = getAddresses({ page: pageInfoState.page, per: pageInfoState.per });
+            promise.then((data) => {
+                setAddressState(data.results);
+                setPageInfoState({ total: data.total, page: data.page, per: data.per });
+            });
+            setRefresh(false);
+        }
+    }, [pageInfoState.page, pageInfoState.per, setPageInfoState, refresh]);
+
+    const handlePaginateClick = useCallback((page: number) => {
         setPageInfoState({ ...pageInfoState, page });
+        setRefresh(true);
     }, [setPageInfoState, pageInfoState]);
+
+    const handleNewFormOpen = useCallback(() => {
+        setNewFormState({ isOpen: true });
+    }, [setNewFormState]);
+
+    const handleEditFormOpen = useCallback((address) => {
+       setEditFormState({ isOpen: true, address });
+    }, [setEditFormState]);
+
+    const handleNewFormClose = useCallback(() => {
+        setNewFormState({ isOpen: false });
+    }, [setNewFormState]);
+
+    const handleEditFormClose = useCallback(() => {
+        setEditFormState({ isOpen: false, address: undefined });
+    }, [setEditFormState]);
+
+    const handleNewFormSave = useCallback((address: AddressType) => {
+        createAddress(address).then((data) => {
+            setNewFormState({ isOpen: false});
+            setRefresh(true);
+        });
+    }, [setNewFormState]);
+
+    const handleEditFormSave = useCallback((address: AddressType) => {
+        updateAddress(address).then((data) => {
+            setEditFormState({ isOpen: false, address: undefined});
+            setRefresh(true);
+        });
+    }, [setEditFormState]);
+
+    const handleDelete = useCallback((id: number) => {
+        deleteAddress(id).then((data) => {
+            setEditFormState({ isOpen: false, address: undefined});
+            setRefresh(true);
+        });
+    }, [setEditFormState]);
 
     return (
         <>
+            <NewAddressForm show={newFormState.isOpen} onClose={handleNewFormClose} onSave={handleNewFormSave} />
+            <EditAddressForm show={editFormState.isOpen} onClickDelete={handleDelete} onClose={handleEditFormClose} onSave={handleEditFormSave} address={editFormState.address} />
+            <Button variant="primary" onClick={handleNewFormOpen}>新規作成</Button>
             <Table striped hover>
                 <thead>
                     <tr>
@@ -48,7 +98,7 @@ export const AddressList = () => {
                 <tbody>
                     {addressState.map((address) => {
                         return (
-                        <tr key={address.id}>
+                        <tr key={address.id} onClick={() => handleEditFormOpen(address)}>
                             <td>{address.name}</td>
                             <td>{address.name_kana}</td>
                             <td>{address.gender}</td>
@@ -66,7 +116,7 @@ export const AddressList = () => {
                     })}
                 </tbody>
             </Table>
-            <Paginate total={pageInfoState.total} per={pageInfoState.per} page={pageInfoState.page} onClick={handleClick} />
+            <Paginate total={pageInfoState.total} per={pageInfoState.per} page={pageInfoState.page} onClick={handlePaginateClick} />
         </>
     );
 }

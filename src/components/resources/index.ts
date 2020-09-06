@@ -2,8 +2,7 @@ import axios from "axios";
 import { AddressResponseType, AddressType } from "./types";
 
 const instance = axios.create({
-  baseURL:
-    "https://f6e5ec69a7da43a1829ca5598ca971f9.vfs.cloud9.us-east-1.amazonaws.com:8081/api",
+  baseURL: "/api",
   timeout: 1000,
 });
 
@@ -25,19 +24,21 @@ export const getAddress = async (id: number) => {
 };
 
 export const createAddress = async (data: AddressType) => {
-  const response = await instance.post<AddressType>("/addresses.json");
+  const response = await instance.post<AddressType>("/addresses.json", {
+    data,
+  });
   return await response.data;
 };
 
-export const updateAddress = async (id: number, data: AddressType) => {
+export const updateAddress = async (data: AddressType) => {
   const response = await instance.put<AddressType>(
-    `/addresses/${id}.json`,
-    data
+    `/addresses/${data.id}.json`,
+    { data }
   );
   return await response.data;
 };
 
-export const deleteUser = async (id: number) => {
+export const deleteAddress = async (id: number) => {
   const response = await instance.delete(`/addresses/${id}.json`);
   return await response.data;
 };

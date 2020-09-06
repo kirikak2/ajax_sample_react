@@ -1,5 +1,5 @@
 export type AddressType = {
-  id: number;
+  id?: number;
   name: string;
   name_kana: string;
   gender: string;
