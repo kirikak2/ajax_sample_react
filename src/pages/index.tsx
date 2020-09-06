@@ -8,6 +8,7 @@ export const AddressList = () => {
     const [addressState, setAddressState] = useState<AddressType[]>([]);
     useEffect(() => {
         const addresses = getAddresses();
+        setAddressState(addresses);
     }, []);
     return (
         <Table>
