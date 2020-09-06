@@ -7,8 +7,15 @@ const instance = axios.create({
   timeout: 1000,
 });
 
-export const getAddresses = async () => {
-  const response = await instance.get<AddressResponseType>("/addresses.json");
+export type GetAddressesParams = {
+  page: number;
+  per: number;
+};
+
+export const getAddresses = async (params: GetAddressesParams) => {
+  const response = await instance.get<AddressResponseType>("/addresses.json", {
+    params,
+  });
   return await response.data;
 };
 
