@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { getAddresses } from '../components/resources';
-import { AddressType } from '../components/resources/types';
+import { getAddresses } from '../resources';
+import { AddressType } from '../resources/types';
 
 import { Table } from 'react-bootstrap';
 
 export const AddressList = () => {
     const [addressState, setAddressState] = useState<AddressType[]>([]);
     useEffect(() => {
-        const addresses = getAddresses();
-        setAddressState(addresses);
+        const promise = getAddresses();
+        promise.then(data => setAddressState(data.results));
     }, []);
+    
     return (
-        <Table>
+        <Table striped hover>
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>名前</th>
                     <th>名前（カナ）</th>
                     <th>性別</th>
@@ -32,9 +32,9 @@ export const AddressList = () => {
             <tbody>
                 {addressState.map((address) => {
                     return (
-                    <tr>
+                    <tr key={address.id}>
                         <td>{address.name}</td>
-                        <td>{address.nameKana}</td>
+                        <td>{address.name_kana}</td>
                         <td>{address.gender}</td>
                         <td>{address.phone}</td>
                         <td>{address.mail}</td>

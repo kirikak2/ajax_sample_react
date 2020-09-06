@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AddressType } from "./types";
+import { AddressResponseType, AddressType } from "./types";
 
 const instance = axios.create({
   baseURL:
@@ -8,18 +8,18 @@ const instance = axios.create({
 });
 
 export const getAddresses = async () => {
-  const response = await instance.get<AddressType>("/addresses.json");
-  return response.data;
+  const response = await instance.get<AddressResponseType>("/addresses.json");
+  return await response.data;
 };
 
 export const getAddress = async (id: number) => {
-  const response = await instance.get<AddressType[]>(`/addresses/${id}.json`);
-  return response.data;
+  const response = await instance.get<AddressType>(`/addresses/${id}.json`);
+  return await response.data;
 };
 
 export const createAddress = async (data: AddressType) => {
   const response = await instance.post<AddressType>("/addresses.json");
-  return response.data;
+  return await response.data;
 };
 
 export const updateAddress = async (id: number, data: AddressType) => {
@@ -27,10 +27,10 @@ export const updateAddress = async (id: number, data: AddressType) => {
     `/addresses/${id}.json`,
     data
   );
-  return response.data;
+  return await response.data;
 };
 
 export const deleteUser = async (id: number) => {
   const response = await instance.delete(`/addresses/${id}.json`);
-  return response.data;
+  return await response.data;
 };

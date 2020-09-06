@@ -1,16 +1,14 @@
 import React from 'react';
 import './App.css';
 
-import { AddressList } from './pages';
+import { Container } from 'react-bootstrap';
+import { AddressList } from './components/AddressList';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-
-      </header>
+    <Container>
       <AddressList />
-    </div>
+    </Container>
   );
 }
 
