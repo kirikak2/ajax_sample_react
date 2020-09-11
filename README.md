@@ -178,6 +178,7 @@ resources/index.tsx
 
 ```
 import axios from "axios";
+import { AddressResponseType } from './types';
 
 const instance = axios.create({
     baseURL: "/api",
