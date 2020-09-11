@@ -10,6 +10,7 @@ https://nodejs.org/ja/download/
 
 ```
 npx create-react-app ajax_client --template typescript
+cd ajax_client
 ```
 
 ## コンポーネントの追加
@@ -24,6 +25,20 @@ npm install --save axios react-bootstrap formik http-proxy-middleware
 
 ```
 npm install --save-dev eslint eslint-config-prettier eslint-plugin-prettier eslint-plugin-react
+```
+
+## typescriptバージョンの更新
+
+package.jsonの中のtypescriptのバージョンを3.7.5 → 3.8.3に書き換えます。
+
+```
+    "typescript": "^3.8.3"
+```
+
+## npm install再実行
+
+```
+npm install
 ```
 
 ## setupProxy.jsの配置
@@ -43,6 +58,12 @@ module.exports = function (app) {
     })
   );
 };
+```
+
+## 立ち上げ
+
+```
+PORT=8081 SKIP_PREFLIGHT_CHECK=true npm start
 ```
 
 ## 演習課題
@@ -111,7 +132,7 @@ export const AddressList = () => {
             <tbody>
                 {addressState.map((address) => {
                     return (
-                        <tr key={address.id} onClick={() => handleEditFormOpen(address)}>
+                        <tr key={address.id}>
                             <td>{address.name}</td>
                             <td>{address.name_kana}</td>
                             <td>{address.gender}</td>
