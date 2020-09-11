@@ -89,6 +89,26 @@ src/
       types.ts
 ```
 
+src/App.tsxの置き換え
+
+```
+import React from 'react';
+import './App.css';
+
+import { Container } from 'react-bootstrap';
+import { AddressList } from './components/AddressList';
+
+function App() {
+  return (
+    <Container>
+      <AddressList />
+    </Container>
+  );
+}
+
+export default App;
+```
+
 AddressList/index.tsx の雛形
 
 ```
