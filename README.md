@@ -18,7 +18,7 @@ cd ajax_client
 使用するライブラリを追加します。
 
 ```
-npm install --save axios react-bootstrap formik http-proxy-middleware
+npm install --save axios react-bootstrap formik http-proxy-middleware bootstrap
 ```
 
 以下は必須ではないですが、入れておくとエディタがコードの間違いを指摘してくれるので便利です。
@@ -95,6 +95,15 @@ src/
     resources/
       index.ts
       types.ts
+```
+
+src/index.tsxにbootstrapのstyleを追加
+
+```
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css'; <- これを追加
 ```
 
 src/App.tsxの置き換え
